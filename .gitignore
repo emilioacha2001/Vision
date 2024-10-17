@@ -13,6 +13,7 @@ bin/
 develop-eggs/
 dist/
 downloads/
+.DS_Store
 eggs/
 .eggs/
 include/
