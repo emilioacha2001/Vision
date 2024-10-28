@@ -1,0 +1,27 @@
+Un momento en visión es un promedio o suma de pixeles que definen un "blob" o segmento de una imagen que cumplen ciertas
+caracteristicas, nos ayudan a analizar formas        
+        
+se consigue el momento
+
+M = cv2.moments(c)
+#print(M)
+
+esta condicional es importante ya que en la formula para conseguir las coordenadas del centroide de alguna forma hay una division
+entre este elemento como denominador por lo que no puede ser 0
+
+if (M["m00"]==0): M["m00"]=1
+
+se calculan utilizando la formula del centroide las coordenadas x,y del momento en cuestion
+x = int(M["m10"]/M["m00"])
+y = int(M['m01']/M['m00'])
+
+dibujamos un circulo en la imagen relleno y escribimos en esta coordenada los valores x, y de la imagen
+
+cv2.circle(frame, (x,y), 7, (0,255,0), -1)
+font = cv2.FONT_HERSHEY_SIMPLEX
+cv2.putText(frame, '{},{}'.format(x,y),(x+10,y), font, 0.75,(0,255,0),1,cv2.LINE_AA)
+
+convexHull es un algoritmo para encontrar los bordes de una forman y luego lo dibujamos
+
+nuevoContorno = cv2.convexHull(c)
+cv2.drawContours(frame, [nuevoContorno], 0, (255,0,0), 3)
