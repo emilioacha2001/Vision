@@ -12,7 +12,7 @@ class TrackImage:
         self.lines = self.detectLines()
 
     def detectPeople(self):
-        rois = self.getROIs([150000, 1000000])
+        rois = self.getROIs([15000, 1000000])
         face_cascade = cv2.CascadeClassifier("models/haarcascade_fullbody.xml")
 
         faces = []
@@ -39,24 +39,26 @@ class TrackImage:
 
     def drawLines(self):
         for line in self.lines:
-            cv2.rectangle(self.frame, (line[0], line[1]), (line[0]+line[2], line[1]+line[3]), (0, 255, 0), 2)
+            cv2.rectangle(self.frame, (line[0], line[1]), (line[0]+line[2], line[1]+line[3]), (0, 255, 100), 2)
 
     def getROIs(self, interest_areas):
-        _, thresh = cv2.threshold(self.gray, 240, 255, cv2.THRESH_BINARY)
+        _, thresh = cv2.threshold(self.gray, 220, 255, cv2.THRESH_BINARY)
         contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         valid_contours = []
+        cv2.drawContours(self.frame, contours, -1, (255, 0, 0), 2)
         for contour in contours:
             area = cv2.contourArea(contour)
-            if area > interest_areas[0] and area < interest_areas[1]:
+            print(area)
+            if area > interest_areas[0] and area < interest_areas[1]:                
                 valid_contours.append(contour)
 
         return valid_contours
     
     def detectRedLights(self):
-        lower1 = np.array([0, 205, 205])
+        lower1 = np.array([0, 205, 30])
         upper1 = np.array([10, 255, 255])
 
-        lower2 = np.array([170, 205, 205])
+        lower2 = np.array([170, 205, 30])
         upper2 = np.array([179, 255, 255])
 
         mask_red_1 = cv2.inRange(self.hsv, lower1, upper1)
